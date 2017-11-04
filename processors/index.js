@@ -45,7 +45,7 @@ export let processorRouter = (job, done) => {
                         width: info.width,
                         height: info.height,
                         format: info.type,
-                        size: res.headers['content-length']
+                        size: parseInt(res.headers['content-length'])
                     }
                 }).then(() => {
                     Job.fromId(job.queue, job.id).then(_job => {
