@@ -19,12 +19,13 @@ let getFileName = (relPath = null) => {
     }
 }
 
-export let _processImage = (imageStream, width = null) => {
+export let _processImage = (imageStream, width = null, height = null) => {
     return new Promise((resolve, reject) => {
         let filePath = getFileName();
         let result = {path: filePath};
-        let _sharp = width === null ? sharp() : sharp().resize(width).min();
 
+        let _sharp = width || height ? sharp().resize(width, height) : sharp();
+        
         let sharpPipe = _sharp
             .toFormat(process.env.OUTPUT_FORMAT)
             .on('info', info => {
@@ -62,26 +63,45 @@ export default (job, done) => {
         return;
     }
 
-    let [previewWidth, previewHeight] = getDimensions(process.env.THUMBNAIL_SIZE_PREVIEW);
-    let [width, height] = getDimensions(process.env.THUMBNAIL_SIZE_DEFAULT);
-
-    Promise.all([
-        _processImage(imageStream, previewWidth), 
-        _processImage(imageStream, width),
-    ]).then(([previewOutput, defaultOutput]) => {
+    switch (job.data.route) {
+        case 'post':
+            let [previewWidth, previewHeight] = getDimensions(process.env.THUMBNAIL_SIZE_PREVIEW);
+            let [width, height] = getDimensions(process.env.THUMBNAIL_SIZE_DEFAULT);
         
-        uploadFiles([previewOutput.path, defaultOutput.path, job.data.original.path]).then(() => {
-            done(null, {...job.data, 
-                preview: previewOutput,
-                default: defaultOutput,
-                type: 'photo'
+            Promise.all([
+                _processImage(imageStream, previewWidth), 
+                _processImage(imageStream, width),
+            ]).then(([previewOutput, defaultOutput]) => {
+                
+                uploadFiles([previewOutput.path, defaultOutput.path, job.data.original.path]).then(() => {
+                    done(null, {...job.data, 
+                        preview: previewOutput,
+                        default: defaultOutput,
+                        type: 'photo'
+                    });
+                }).catch(err => {
+                    done(err);
+                })
+                
+                
+            }).catch(err => {
+                done(err);
             });
-        }).catch(err => {
-            done(err);
-        })
-        
-        
-    }).catch(err => {
-        done(err);
-    });
+            break;
+        case 'avatar':
+            let [avatarWidth, avatarHeight] = getDimensions(process.env.AVATAR_SIZE_DEFAULT);
+            _processImage(imageStream, avatarWidth, avatarHeight).then(output => {
+                uploadFile(output.path).then(() => {
+                    done(null, {
+                        ...job.data,
+                        default: output,
+                        type: 'photo'
+                    })
+                }).catch(err => {
+                    done(err);
+                });
+            });
+    }
+
+    
 };
