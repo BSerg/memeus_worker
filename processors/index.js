@@ -51,17 +51,21 @@ export let processorRouter = (job, done) => {
                     Job.fromId(job.queue, job.id).then(_job => {
                         switch (contentType) {
                             case 'image/gif':
-                                let processed = false;
-                                _streamClone.pipe(isAnimated())
-                                    .once('animated', () => {
-                                        processed = true;
-                                        animationProcessor(_job, done);
-                                    })
-                                    .once('finish', () => {
-                                        if (!processed) {
-                                            imageProcessor(_job, done);
-                                        }
-                                    });
+                                if (_job.data.route == 'avatar') {
+                                    imageProcessor(_job, done);
+                                } else {
+                                    let processed = false;
+                                    _streamClone.pipe(isAnimated())
+                                        .once('animated', () => {
+                                            processed = true;
+                                            animationProcessor(_job, done);
+                                        })
+                                        .once('finish', () => {
+                                            if (!processed) {
+                                                imageProcessor(_job, done);
+                                            }
+                                        });
+                                }
                                 break;
                             case 'image/jpeg':
                             case 'image/jpg':
