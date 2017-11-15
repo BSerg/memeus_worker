@@ -5,11 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js --exec babel-node",
-    "_start": "babel-node index.js",
-    "_test": "babel-node test.js"
+    "_build": "babel src -d dist",
+    "build": "NODE_ENV=production gulp",
+    "deploy": "NODE_ENV=production gulp deploy",
+    "start": "nodemon src/index.js --exec babel-node"
   },
-  "author": "",
+  "author": "Bserg",
   "license": "ISC",
   "dependencies": {
     "animated-gif-detector": "^1.2.0",
@@ -24,7 +25,6 @@
     "bull": "^3.3.5",
     "dotenv": "^4.0.0",
     "fluent-ffmpeg": "^2.1.2",
-    "mkdirp": "^0.5.1",
     "probe-image-size": "^3.1.0",
     "request": "^2.83.0",
     "s3": "^4.4.0",
@@ -36,5 +36,14 @@
       "exchange/*"
     ],
     "delay": "2500"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.0-beta.32",
+    "@babel/preset-env": "^7.0.0-beta.32",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-rsync": "0.0.8",
+    "mkdirp": "^0.5.1"
   }
 }
