@@ -26,7 +26,7 @@ gulp.task('package.json', () => {
 });
 
 gulp.task('newrelic', () => {
-    return gulp.src(`newrelic.js`).pipe(gulp.dest(getBuildPath()) + '/server');
+    return gulp.src(`newrelic.js`).pipe(gulp.dest(getBuildPath() + '/server'));
 });
 
 gulp.task('babel', () => {
