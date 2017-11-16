@@ -23,7 +23,11 @@ gulp.task('package.json', () => {
     mkdirp(getBuildPath(), () => {
         fs.writeFileSync(getBuildPath() + '/package.json', JSON.stringify(packageJson, null, 4));
     })
-  });
+});
+
+gulp.task('newrelic', () => {
+    return gulp.src(`newrelic.js`).pipe(gulp.dest(getBuildPath()) + '/server');
+});
 
 gulp.task('babel', () => {
     gulp
@@ -42,4 +46,4 @@ gulp.task('deploy', () => {
     }))
 });
 
-gulp.task('default', ['babel', 'env', 'package.json']);
+gulp.task('default', ['babel', 'env', 'package.json', 'newrelic']);

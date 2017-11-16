@@ -25,6 +25,7 @@
     "bull": "^3.3.5",
     "dotenv": "^4.0.0",
     "fluent-ffmpeg": "^2.1.2",
+    "newrelic": "^2.4.0",
     "probe-image-size": "^3.1.0",
     "request": "^2.83.0",
     "s3": "^4.4.0",

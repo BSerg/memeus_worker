@@ -1,6 +1,8 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
+import newrelic from 'newrelic';
+
 import Queue from 'bull';
 
 import QueueWorker from './QueueWorker';
