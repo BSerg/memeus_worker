@@ -5,23 +5,12 @@ import fs from 'fs';
 import request from 'request';
 
 import {uploadFile, uploadFiles} from '../uploader';
+import {getFileName, getDimensions} from './index';
 
-
-let getDimensions = sizesString => {
-    return sizesString.split('x').map(value => {return parseInt(value)});
-}
-
-let getFileName = (relPath = null) => {
-    if (relPath === null) {
-        return uuid.v4() + '.jpeg';
-    } else {
-        return path.join(relPath, uuid.v4() + '.jpeg');
-    }
-}
 
 export let _processImage = (imageStream, width = null, height = null) => {
     return new Promise((resolve, reject) => {
-        let filePath = getFileName();
+        let filePath = getFileName('media');
         let result = {path: filePath};
 
         let _sharp = width || height ? sharp().resize(width, height) : sharp();

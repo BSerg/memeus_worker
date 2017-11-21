@@ -5,12 +5,24 @@ import fs from 'fs';
 import probe from 'probe-image-size';
 import path from 'path';
 import Job from 'bull/lib/job';
+import mkdirp from 'mkdirp';
 
 import imageProcessor from './imageProcessor';
 import animationProcessor from './animationProcessor';
 
 const contentTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif'];
 
+export let getFileName = (prefix = null, ext = 'jpeg') => {
+    let _name = uuid.v4();
+    let fileName = path.join(_name.substr(0, 2), _name.substr(2, 2), _name + '.' + ext);
+    let _path = prefix ? path.join(prefix, fileName) : fileName;
+    mkdirp.sync(path.dirname(path.join(process.env.EXCHANGE_DIR, _path)));
+    return _path;
+}
+
+export let getDimensions = sizesString => {
+    return sizesString.split('x').map(value => {return parseInt(value)});
+}
 
 export let processorRouter = (job, done) => {
     // TODO: refactor processors for promises

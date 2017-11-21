@@ -11,26 +11,13 @@ import sharp from 'sharp';
 import mkdirp from 'mkdirp';
 
 import {uploadFile, uploadFiles} from '../uploader';
+import {getFileName, getDimensions} from './index';
 
-
-let getDimensions = sizesString => {
-    return sizesString.split('x').map(value => {return parseInt(value)});
-}
-
-let getFileName = (prefix = null, ext = 'mp4') => {
-    if (prefix === null) {
-        return uuid.v4() + '.' + ext;
-    } else {
-        let _path = path.join(prefix, uuid.v4() + '.' + ext);
-        mkdirp.sync(path.dirname(_path));
-        return _path;
-    }
-}
 
 export default (job, done) => {
     let originalFilePath = path.join(process.env.EXCHANGE_DIR, job.data.original.path);
 
-    let fileName = getFileName();
+    let fileName = getFileName('media', 'mp4');
     
     let filePath = path.join(process.env.EXCHANGE_DIR, fileName);
     let [width, height] = getDimensions(process.env.VIDEO_SIZE_DEFAULT);
@@ -73,9 +60,9 @@ export default (job, done) => {
             }
 
             let createThumbnail = () => {
-                let tempPreviewFileName = getFileName(null, 'png');
+                let tempPreviewFileName = getFileName('media/images', 'png');
                 let tempPreviewFilePath = path.join(process.env.EXCHANGE_DIR, tempPreviewFileName);
-                let previewFileName = getFileName(null, 'jpg');
+                let previewFileName = getFileName('media/images', 'jpg');
                 let previewFilePath = path.join(process.env.EXCHANGE_DIR, previewFileName);
                 let [previewWidth, previewHeight] = getDimensions(process.env.THUMBNAIL_SIZE_PREVIEW);
                 return new Promise((resolve, reject) => {
