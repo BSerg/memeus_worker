@@ -60,9 +60,9 @@ export default (job, done) => {
             }
 
             let createThumbnail = () => {
-                let tempPreviewFileName = getFileName('media/images', 'png');
+                let tempPreviewFileName = getFileName('media', 'png');
                 let tempPreviewFilePath = path.join(process.env.EXCHANGE_DIR, tempPreviewFileName);
-                let previewFileName = getFileName('media/images', 'jpg');
+                let previewFileName = getFileName('media', 'jpg');
                 let previewFilePath = path.join(process.env.EXCHANGE_DIR, previewFileName);
                 let [previewWidth, previewHeight] = getDimensions(process.env.THUMBNAIL_SIZE_PREVIEW);
                 return new Promise((resolve, reject) => {
