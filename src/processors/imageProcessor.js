@@ -16,6 +16,7 @@ export let _processImage = (imageStream, width = null, height = null) => {
         let _sharp = width || height ? sharp().resize(width, height) : sharp();
         
         let sharpPipe = _sharp
+            .background("#FFFFFF").flatten(true)
             .toFormat(process.env.OUTPUT_FORMAT)
             .on('info', info => {
                 result.width = info.width;
