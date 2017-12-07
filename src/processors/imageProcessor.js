@@ -55,6 +55,7 @@ export default (job, done) => {
 
     switch (job.data.route) {
         case 'post':
+        case 'comment':
             let [previewWidth, previewHeight] = getDimensions(process.env.THUMBNAIL_SIZE_PREVIEW);
             let [width, height] = getDimensions(process.env.THUMBNAIL_SIZE_DEFAULT);
         
