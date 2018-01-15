@@ -34,7 +34,7 @@ export let processorRouter = (job, done) => {
         }
         
         let contentType = res.headers['content-type'];
-        
+
         if (contentTypes.indexOf(contentType) == -1) {
             console.log(contentType, media)
             done('Wrong file format');
