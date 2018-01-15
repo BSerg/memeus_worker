@@ -28,7 +28,10 @@ export let processorRouter = (job, done) => {
     // TODO: refactor processors for promises
     let media = job.data;
     request.head(media.exchangePath, (err, res, body) => {
-        if (err) done(err);
+        if (err) {
+            console.log(err);
+            return done(err);
+        }
         
         let contentType = res.headers['content-type'];
         
